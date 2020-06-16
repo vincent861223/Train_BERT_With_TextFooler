@@ -1,0 +1,10 @@
+None
+results
+yihsuan
+BERT
+npattern
+__pycache__
+.DS_Store
+*.pkl
+*.npy
+counter-fitted-vectors.txt
