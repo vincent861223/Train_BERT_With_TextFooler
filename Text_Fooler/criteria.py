@@ -1,7 +1,7 @@
 from __future__ import division
 import nltk
 from nltk.stem.wordnet import WordNetLemmatizer
-from pattern.en import conjugate, lemma, lexeme, PRESENT, SG, PL, PAST, PROGRESSIVE
+#from pattern.en import conjugate, lemma, lexeme, PRESENT, SG, PL, PAST, PROGRESSIVE
 import random
 
 

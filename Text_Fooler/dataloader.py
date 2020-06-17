@@ -30,11 +30,17 @@ def clean_str(string, TREC=False):
 def read_corpus(path, clean=True, MR=True, encoding='utf8', shuffle=False, lower=True):
     data = []
     labels = []
-    with open(path,'rb') as f:
-        lines = pickle.load(f)
-    for i in lines:
-        data.append(i[0].split())
-        labels.append(int(i[1]))
+    with open(path, "r") as f:
+        lines = f.readlines()
+        for line in lines:
+            label, text = line[:-1][0], line[:-1][2:]
+            data.append(text.split())
+            labels.append(int(label))
+    # with open(path,'rb') as f:
+    #     lines = pickle.load(f)
+    # for i in lines:
+    #     data.append(i[0].split())
+    #     labels.append(int(i[1]))
 #    with open(path, encoding=encoding) as fin:
 #        for line in fin:
 #            if MR:

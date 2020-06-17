@@ -2,9 +2,12 @@ None
 results
 yihsuan
 BERT/
+saved_model/
+venv
 npattern
 __pycache__
 .DS_Store
 *.pkl
 *.npy
 counter-fitted-vectors.txt
+data/IMDB\ Dataset.csv

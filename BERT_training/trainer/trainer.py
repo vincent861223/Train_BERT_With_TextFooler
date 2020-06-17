@@ -46,6 +46,7 @@ class Trainer(BaseTrainer):
 
             self.optimizer.zero_grad()
             output = self.model(data)
+            target = data['labels']
             loss = self.criterion(output[1], target)
             #loss = output[0]
             loss.backward()
@@ -84,9 +85,12 @@ class Trainer(BaseTrainer):
         with torch.no_grad():
             valid_data_loader = tqdm(self.valid_data_loader, desc='validating')
             for batch_idx, batch in enumerate(valid_data_loader):
-                data, target = batch['index'].to(self.device), batch['gold'].to(self.device)
+                data = batch["data"]
+                for key in data.keys():
+                    data[key] = data[key].to(self.device)
 
-                output = self.model(data, target)
+                output = self.model(data)
+                target = data["labels"]
                 #loss = output[0] 
                 loss = self.criterion(output[1], target)
 

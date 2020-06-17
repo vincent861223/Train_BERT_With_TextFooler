@@ -1,0 +1,6 @@
+torch
+torchvision
+sklearn
+pandas
+tqdm
+

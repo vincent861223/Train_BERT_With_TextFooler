@@ -2,6 +2,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 from base import BaseModel
 from transformers import BertForSequenceClassification
+import torch
 
 
 class MnistModel(BaseModel):
@@ -24,7 +25,7 @@ class MnistModel(BaseModel):
 
 
 class BertClassifier(BaseModel):
-    def __init__(self):
+    def __init__(self, load_pretrained=False):
         super().__init__()
         self.bert = BertForSequenceClassification.from_pretrained(
              "bert-base-uncased", # Use the 12-layer BERT model, with an uncased vocab.
@@ -33,6 +34,11 @@ class BertClassifier(BaseModel):
              output_attentions = False, # Whether the model returns attentions weights.
              output_hidden_states = False, # Whether the model returns all hidden-states. 
             )
+
+        if(load_pretrained):
+            state_dict = torch.load("../model/pytorch_model.bin")
+            #state_dict = {name.replace('model.', ''): param for name, param in state_dict.items()}
+            self.bert.load_state_dict(state_dict)
         # self.bert.config.__dict__['hidden_dropout_prob'] = 0.3
         # self.fc = nn.Sequential(
         #                         nn.Linear(768, 256),

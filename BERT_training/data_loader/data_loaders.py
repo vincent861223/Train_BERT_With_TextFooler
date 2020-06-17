@@ -36,7 +36,8 @@ class IMDBDataset(Dataset):
         self.test = test
         self.max_seq_len = max_seq_len
         self.tokenizer = BertTokenizer.from_pretrained("bert-base-uncased", do_lower_case=True)
-        self.loadData(datapath, train=self.train, test=self.test, adv_version=adv_version)
+        if(adv_version): self.loadAdvData(datapath, train=self.train, test=self.test)
+        else: self.loadData(datapath, train=self.train, test=self.test)
         
 
     def __len__(self):
@@ -45,18 +46,41 @@ class IMDBDataset(Dataset):
     def  __getitem__(self, index):
         return self.data[index]
 
-    def loadData(self, datapath, train=False, test=False, adv_version=False):
+    def loadAdvData(self, datapath, train=False, test=False, clean=True, lower=True):
+        with open(datapath, encoding='utf-8') as f:
+            for line in f:
+                label, _, text = line.partition(':')
+                name,_,label = label.partition('(')
+                if name.find('adv'):
+                    if label.find('1'):
+                        label = '0'
+                    else:
+                        label = '1'
+                else:
+                    if label.find('1'):
+                        label = '1'
+                    else:
+                        label = '0'
+                _,_,text = text.partition(' ')
+                # if clean:
+                #     text = clean_str(text.strip()) if clean else text.strip()
+                text = text.strip()
+                if lower:
+                    text = text.lower()
+                if text != '':
+                    input_ids, attention_mask, token_type_ids = self.sentenceToIndex(text)
+                    self.data.append({"label": int(label), "text": text, "input_ids": input_ids, "attention_mask": attention_mask, "token_type_ids": token_type_ids})
+
+    def loadData(self, datapath, train=False, test=False):
         with open(datapath) as f:
             lines = f.readlines()
             lines = tqdm(lines, desc="Loading data")
-            if adv_version:
-                pass
-            else: 
-                for line in lines:
-                    token = line[:-1][0], line[:-1][2:]
-                    if train:
-                        input_ids, attention_mask, token_type_ids = self.sentenceToIndex(token[1])
-                        self.data.append({"label": int(token[0]), "text": token[1], "input_ids": input_ids, "attention_mask": attention_mask, "token_type_ids": token_type_ids})
+            for line in lines:
+                token = line[:-1][0], line[:-1][2:]
+                if train:
+                    input_ids, attention_mask, token_type_ids = self.sentenceToIndex(token[1])
+                    self.data.append({"label": int(token[0]), "text": token[1], "input_ids": input_ids, "attention_mask": attention_mask, "token_type_ids": token_type_ids})
+                
 
     def sentenceToIndex(self, sentence, add_special_tokens=True):
         tokens = self.tokenizer.tokenize(sentence)
