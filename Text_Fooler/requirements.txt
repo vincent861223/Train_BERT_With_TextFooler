@@ -133,7 +133,7 @@ stevedore==1.32.0
 tensorboard==1.15.0
 tensorflow==1.15.0
 tensorflow-estimator==1.15.1
-tensorflow-gpu==1.15.0
+tensorflow-gpu==1.15.4
 tensorflow-hub==0.8.0
 termcolor==1.1.0
 testfixtures==6.14.1
