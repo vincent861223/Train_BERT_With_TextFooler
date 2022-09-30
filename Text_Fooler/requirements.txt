@@ -64,7 +64,7 @@ jedi==0.17.0
 jeepney==0.4.3
 Jinja2==2.11.2
 jmespath==0.10.0
-joblib==0.15.1
+joblib==1.2.0
 Keras-Applications==1.0.8
 Keras-Preprocessing==1.1.2
 keyring==21.2.1
